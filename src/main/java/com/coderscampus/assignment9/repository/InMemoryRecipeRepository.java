@@ -30,7 +30,7 @@ public class InMemoryRecipeRepository implements RecipeRepository {
     @Override
     public List<Recipe> readRecipes() throws IOException {
         List<Recipe> recipes = new ArrayList<>();
-        Resource resource = resourceLoader.getResource("classpath:files/recipes.txt");
+        Resource resource = resourceLoader.getResource("classpath:recipes.txt");
 
         if (!resource.exists()) {
             throw new IOException("File not found: recipes.txt");
@@ -42,28 +42,28 @@ public class InMemoryRecipeRepository implements RecipeRepository {
                     .withQuoteMode(QuoteMode.MINIMAL).parse(in);
 
             for (CSVRecord record : records) {
-                Recipe recipe = new Recipe();
-                recipe.setCookingMinutes(Integer.parseInt(record.get(0)));
-                recipe.setDairyFree(Boolean.parseBoolean(record.get(1)));
-                recipe.setGlutenFree(Boolean.parseBoolean(record.get(2)));
-                recipe.setInstructions(record.get(3));
-                recipe.setPreparationMinutes(Double.parseDouble(record.get(4)));
-                recipe.setPricePerServing(Double.parseDouble(record.get(5)));
-                recipe.setReadyInMinutes(Integer.parseInt(record.get(6)));
-                recipe.setServings(Integer.parseInt(record.get(7)));
-                recipe.setSpoonacularScore(Double.parseDouble(record.get(8)));
-                recipe.setTitle(record.get(9));
-                recipe.setVegan(Boolean.parseBoolean(record.get(10)));
-                recipe.setVegetarian(Boolean.parseBoolean(record.get(11)));
+                Recipe recipe = getRecipe(record);
                 recipes.add(recipe);
             }
         }
         return recipes;
     }
 
-    @Override
-    public List<Recipe> findAll() {
-        return recipes;
+    private static Recipe getRecipe(CSVRecord record) {
+        Recipe recipe = new Recipe();
+        recipe.setCookingMinutes(Integer.parseInt(record.get(0)));
+        recipe.setDairyFree(Boolean.parseBoolean(record.get(1)));
+        recipe.setGlutenFree(Boolean.parseBoolean(record.get(2)));
+        recipe.setInstructions(record.get(3));
+        recipe.setPreparationMinutes(Double.parseDouble(record.get(4)));
+        recipe.setPricePerServing(Double.parseDouble(record.get(5)));
+        recipe.setReadyInMinutes(Integer.parseInt(record.get(6)));
+        recipe.setServings(Integer.parseInt(record.get(7)));
+        recipe.setSpoonacularScore(Double.parseDouble(record.get(8)));
+        recipe.setTitle(record.get(9));
+        recipe.setVegan(Boolean.parseBoolean(record.get(10)));
+        recipe.setVegetarian(Boolean.parseBoolean(record.get(11)));
+        return recipe;
     }
 
     @Override

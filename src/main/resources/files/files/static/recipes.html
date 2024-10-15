@@ -25,7 +25,7 @@
                 recipeList.innerHTML = '';  // Clear the previous list
                 data.forEach(recipe => {
                     const li = document.createElement('li');
-                    li.textContent = `${recipe.title} - Servings: ${recipe.servings}`;
+                    li.textContent = `${recipe.title} - Instructions: ${recipe.instructions}`;
                     recipeList.appendChild(li);
                 });
             })

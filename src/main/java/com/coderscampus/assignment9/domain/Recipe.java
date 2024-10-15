@@ -26,7 +26,8 @@ public class Recipe {
 
     private Boolean vegetarian;
 
-    public Recipe() {}
+    public Recipe() {
+    }
 
     public Integer getCookingMinutes() {
         return cookingMinutes;
