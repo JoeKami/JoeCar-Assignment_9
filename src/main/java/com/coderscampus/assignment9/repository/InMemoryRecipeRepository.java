@@ -3,11 +3,15 @@ package com.coderscampus.assignment9.repository;
 import com.coderscampus.assignment9.domain.Recipe;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.QuoteMode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,27 +20,28 @@ public class InMemoryRecipeRepository implements RecipeRepository {
 
     List<Recipe> recipes = new ArrayList<>();
 
-    @Override
-    public List<Recipe> findAll() {
-        return recipes;
+    private final ResourceLoader resourceLoader;
+
+    @Autowired
+    public InMemoryRecipeRepository(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
     }
 
     @Override
-    public void saveAll(List<Recipe> recipes) {
-        this.recipes.clear();
-        this.recipes.addAll(recipes);
-
-    }
-
-    @Override
-    public List<Recipe> readRecipes () throws IOException {
+    public List<Recipe> readRecipes() throws IOException {
         List<Recipe> recipes = new ArrayList<>();
+        Resource resource = resourceLoader.getResource("classpath:files/recipes.txt");
 
-        try(Reader in = new FileReader("recipes.txt")){
+        if (!resource.exists()) {
+            throw new IOException("File not found: recipes.txt");
+        }
 
-            Iterable<CSVRecord> records = CSVFormat.DEFAULT.withHeader().withIgnoreSurroundingSpaces().parse(in);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
 
-            for(CSVRecord record : records) {
+            Iterable<CSVRecord> records = CSVFormat.DEFAULT.withHeader().withIgnoreSurroundingSpaces().withEscape('\\')
+                    .withQuoteMode(QuoteMode.MINIMAL).parse(in);
+
+            for (CSVRecord record : records) {
                 Recipe recipe = new Recipe();
                 recipe.setCookingMinutes(Integer.parseInt(record.get(0)));
                 recipe.setDairyFree(Boolean.parseBoolean(record.get(1)));
@@ -52,9 +57,18 @@ public class InMemoryRecipeRepository implements RecipeRepository {
                 recipe.setVegetarian(Boolean.parseBoolean(record.get(11)));
                 recipes.add(recipe);
             }
-
         }
         return recipes;
     }
 
+    @Override
+    public List<Recipe> findAll() {
+        return recipes;
+    }
+
+    @Override
+    public void saveAll(List<Recipe> recipes) {
+        this.recipes.clear();
+        this.recipes.addAll(recipes);
+    }
 }

@@ -4,6 +4,7 @@ import com.coderscampus.assignment9.domain.Recipe;
 import com.coderscampus.assignment9.repository.InMemoryRecipeRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -16,8 +17,8 @@ public class FileService {
         this.inMemoryRecipeRepository = inMemoryRecipeRepository;
     }
 
-    public List<Recipe> getAllRecipes() {
-        return inMemoryRecipeRepository.findAll();
+    public List<Recipe> getAllRecipes() throws IOException {
+        return inMemoryRecipeRepository.readRecipes();
     }
 
     public void saveRecipes(List<Recipe> recipes) {
