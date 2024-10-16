@@ -35,10 +35,9 @@ public class RecipeRepository {
         }
     }
 
-    public List<Recipe> getAll () {
+    public List<Recipe> getAll() {
         return recipes;
     }
-
 
     private static Recipe getRecipe(CSVRecord record) {
         Recipe recipe = new Recipe();

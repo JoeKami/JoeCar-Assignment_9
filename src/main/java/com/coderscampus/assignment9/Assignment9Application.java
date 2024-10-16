@@ -7,6 +7,6 @@ import java.io.IOException;
 
 @SpringBootApplication
 public class Assignment9Application {
-	public static void main(String[] args) throws IOException {SpringApplication.run(Assignment9Application.class, args);
+	public static void main(String[] args) {SpringApplication.run(Assignment9Application.class, args);
 	}
 }
