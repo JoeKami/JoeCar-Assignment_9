@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipes</title>
+</head>
+<body>
+<h1>Recipes</h1>
+<button id="all-recipes-btn">All Recipes</button>
+<button id="gluten-free-btn">Gluten Free</button>
+<button id="vegan-btn">Vegan</button>
+<button id="vegetarian-btn">Vegetarian</button>
+<button id="vegan-and-gluten-free-btn">Vegan & Gluten Free</button>
+
+<ul id="recipe-list"></ul>
+
+<script>
+    const recipeList = document.getElementById('recipe-list');
+
+    function fetchRecipes(endpoint) {
+        fetch(endpoint)
+            .then(response => response.json())
+            .then(data => {
+                recipeList.innerHTML = '';  // Clear the previous list
+                data.forEach(recipe => {
+                    const li = document.createElement('li');
+                    li.textContent = `${recipe.title} - Instructions: ${recipe.instructions}`;
+                    recipeList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching recipes:', error));
+    }
+
+    document.getElementById('all-recipes-btn').addEventListener('click', () => {
+        fetchRecipes('/all-recipes');
+    });
+
+    document.getElementById('gluten-free-btn').addEventListener('click', () => {
+        fetchRecipes('/gluten-free');
+    });
+
+    document.getElementById('vegan-btn').addEventListener('click', () => {
+        fetchRecipes('/vegan');
+    });
+
+    document.getElementById('vegetarian-btn').addEventListener('click', () => {
+        fetchRecipes('/vegetarian');
+    });
+
+    document.getElementById('vegan-and-gluten-free-btn').addEventListener('click', () => {
+        fetchRecipes('/vegan-and-gluten-free');
+    });
+
+    fetchRecipes('/all-recipes');
+</script>
+</body>
+</html>

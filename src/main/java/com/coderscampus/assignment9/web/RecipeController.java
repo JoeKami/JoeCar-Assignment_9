@@ -2,7 +2,7 @@ package com.coderscampus.assignment9.web;
 
 
 import com.coderscampus.assignment9.domain.Recipe;
-import com.coderscampus.assignment9.service.FileService;
+import com.coderscampus.assignment9.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,13 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-public class FileController {
+public class RecipeController {
 
-    @Autowired
-    private final FileService fileService;
+    private final RecipeService recipeService;
 
-    public FileController(FileService fileService) {
-        this.fileService = fileService;
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
     }
 
     @GetMapping("")
@@ -28,34 +27,34 @@ public class FileController {
 
     @GetMapping("/gluten-free")
     public List<Recipe> getGlutenFreeRecipes () throws IOException {
-        return fileService.getAllRecipes().stream()
+        return recipeService.getAllRecipes().stream()
                 .filter(Recipe::getGlutenFree)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/vegan")
     public List<Recipe> getVeganRecipes () throws IOException {
-        return fileService.getAllRecipes().stream()
+        return recipeService.getAllRecipes().stream()
                 .filter(Recipe::getVegan)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/vegan-and-gluten-free")
     public List<Recipe> getVeganAndGlutenFreeRecipes () throws IOException {
-        return fileService.getAllRecipes().stream()
+        return recipeService.getAllRecipes().stream()
                 .filter(recipe -> recipe.getVegan() && recipe.getGlutenFree())
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/vegetarian")
     public List<Recipe> getVegetarianRecipes () throws IOException {
-        return fileService.getAllRecipes().stream()
+        return recipeService.getAllRecipes().stream()
                 .filter(Recipe::getVegetarian)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/all-recipes")
     public List<Recipe> getAllRecipes () throws IOException {
-        return fileService.getAllRecipes();
+        return recipeService.getAllRecipes();
     }
 }
